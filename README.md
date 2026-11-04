@@ -1,94 +1,69 @@
-# Enterprise Firewall & Network Segmentation Lab
+Enterprise Firewall & Network Segmentation Lab
+A hands-on enterprise network security lab built with Cisco Packet
+Tracer and a simulated Cisco ASA 5506-X firewall. The project
+demonstrates security-zone segmentation, firewall interface
+configuration, access control lists (ACLs), dynamic NAT/PAT, routing,
+and connectivity validation.
+Project Objectives
+- Design an enterprise network with separate Inside, Guest, DMZ, and
+  Outside zones.
+- Configure Cisco ASA interfaces and security levels.
+- Restrict Guest access to a protected administrative workstation
+  using an ACL.
+- Configure dynamic PAT for internal networks.
+- Configure routing between the firewall and a simulated ISP router.
+- Validate permitted and denied traffic with connectivity tests and
+  ACL hit counters.
+Network Topology
 
-A hands-on network security project built using **Cisco Packet Tracer** and a simulated **Cisco ASA 5506-X firewall**. The lab demonstrates enterprise network segmentation, firewall security policies, access control lists (ACLs), NAT configuration, and connectivity testing across multiple security zones.
+Devices
+  Device                Role
+  Cisco ASA 5506-X      Firewall between the network zones
+Cisco 2911 router     Simulated ISP router
+Cisco 2960 switches   LAN and DMZ connectivity
+Admin PC              Administrative workstation
+Employee PC           Employee workstation
+Guest PC              Guest network client
+DMZ Server            Server hosted in the DMZ
+IP Addressing
+  Zone / Device   Network or IP address   Default gateway
+  Outside         203.0.113.0/30          ISP router: 203.0.113.1
+Inside          192.168.10.0/24         192.168.10.1
+DMZ             192.168.20.0/24         192.168.20.1
+Guest           192.168.30.0/24         192.168.30.1
+Admin PC        192.168.10.10/24        192.168.10.1
+Employee PC     192.168.10.20/24        192.168.10.1
+Guest PC        192.168.30.30/24        192.168.30.1
+DMZ Server      192.168.20.10/24        192.168.20.1
+ASA Firewall Configuration
+Interface and security-zone assignments
+  ASA interface        Nameif / zone          IP address   Security level
+  GigabitEthernet1/1   Outside            203.0.113.2/30                0
+GigabitEthernet1/2   Inside            192.168.10.1/24              100
+GigabitEthernet1/3   DMZ               192.168.20.1/24               50
+GigabitEthernet1/4   Guest             192.168.30.1/24               25
 
-## Project Overview
+All four configured ASA interfaces were verified as up/up.
 
-The objective of this project is to design and implement a segmented enterprise network where different departments and network zones communicate through a centralized firewall.
+Guest access-control policy
+An ACL named GUEST-POLICY was applied inbound on the Guest interface.
 
-The Cisco ASA firewall separates the network into four security zones:
+  Order   Source          Destination     Action
+  1       192.168.30.30   192.168.10.10   Deny
+2       Any             Any             Permit
 
-- **Outside:** External network connectivity.
-- **Inside:** Trusted corporate network for administrators and employees.
-- **DMZ:** Isolated network hosting publicly accessible services.
-- **Guest:** Restricted network for guest devices.
+The first rule blocks the Guest PC from reaching the Admin PC. The
+second rule permits other IP traffic matching this ACL; traffic is still
+subject to the ASA's other policies and stateful inspection.
 
-Firewall policies control communication between these zones and restrict unauthorized access to sensitive internal resources.
-
-## Network Architecture
-
-![Network Topology](Screenshots/01_Network-Topology.png)
-
-### Network Components
-
-| Component | Device | Purpose |
-|---|---|---|
-| Firewall | Cisco ASA 5506-X | Traffic filtering and network security |
-| ISP Router | Cisco 2911 | Simulated external network |
-| LAN Switch | Cisco 2960 | Connects internal users |
-| DMZ Switch | Cisco 2960 | Connects DMZ server |
-| Admin PC | PC-PT | Administrator workstation |
-| Employee PC | PC-PT | Employee workstation |
-| Guest PC | PC-PT | Guest network client |
-| DMZ Server | Server-PT | Simulated server in DMZ |
-
-## IP Addressing Scheme
-
-| Network Zone | Network Address | Gateway | Device |
-|---|---|---|---|
-| Outside | 203.0.113.0/30 | 203.0.113.1 | ISP Router |
-| Inside | 192.168.10.0/24 | 192.168.10.1 | Admin / Employee |
-| DMZ | 192.168.20.0/24 | 192.168.20.1 | DMZ Server |
-| Guest | 192.168.30.0/24 | 192.168.30.1 | Guest PC |
-
-### End-Device IP Configuration
-
-| Device | IP Address | Default Gateway |
-|---|---|---|
-| Admin PC | 192.168.10.10 | 192.168.10.1 |
-| Employee PC | 192.168.10.20 | 192.168.10.1 |
-| Guest PC | 192.168.30.30 | 192.168.30.1 |
-| DMZ Server | 192.168.20.10 | 192.168.20.1 |
-
-## Firewall Configuration
-
-### ASA Interface Configuration
-
-| Interface | Security Zone | IP Address | Security Level |
-|---|---|---|---|
-| GigabitEthernet1/1 | Outside | 203.0.113.2/30 | 0 |
-| GigabitEthernet1/2 | Inside | 192.168.10.1/24 | 100 |
-| GigabitEthernet1/3 | DMZ | 192.168.20.1/24 | 50 |
-| GigabitEthernet1/4 | Guest | 192.168.30.1/24 | 25 |
-
-All four configured firewall interfaces were verified as operational.
-
-![ASA Interface Configuration](Screenshots/02_ASA-Interface-Configuration.png)
-
-### Security Policies and ACL
-
-Configured an access control list named `GUEST-POLICY` and applied it inbound on the Guest interface.
-
-| Rule | Source | Destination | Action |
-|---|---|---|---|
-| 1 | 192.168.30.30 | 192.168.10.10 | Deny |
-| 2 | Any | Any | Permit |
-
-The first rule blocks the Guest PC from accessing the Admin PC. The second permits other IP traffic, subject to the remaining firewall policies.
-
-ACL hit counters were verified using:
-
-```cisco
+The ACL was checked with:
 show access-list
-```
+The captured output shows hit counters on both ACL entries, confirming
+that traffic matched the deny and permit rules.
 
-![ASA ACL Hit Counters](Screenshots/07_ASA-ACL-Hit-Counters.png)
-
-### NAT Configuration
-
-Configured dynamic PAT (Port Address Translation) for the Inside, DMZ, and Guest networks using the outside interface address.
-
-```cisco
+Dynamic NAT/PAT
+Dynamic PAT was configured for the Inside, DMZ, and Guest networks using
+the ASA outside interface address.
 object network INSIDE-NET
  subnet 192.168.10.0 255.255.255.0
  nat (inside,outside) dynamic interface
@@ -100,19 +75,15 @@ object network DMZ-NET
 object network GUEST-NET
  subnet 192.168.30.0 255.255.255.0
  nat (guest,outside) dynamic interface
-```
-
-### Routing Configuration
-
-- Configured a default route on the ASA pointing to the ISP router.
-- Configured static return routes on the ISP router for the Inside, DMZ, and Guest networks.
-- Used the ISP router loopback address `198.51.100.1/32` as a simulated external test destination.
-
-### ICMP Inspection
-
-Enabled ICMP inspection through the global service policy to support ICMP request and reply traffic across security zones.
-
-```cisco
+Routing
+- The ASA default route points to the ISP router at 203.0.113.1.
+- The ISP router has static return routes for the Inside, DMZ, and
+  Guest subnets via 203.0.113.2.
+- The ISP router loopback 198.51.100.1/32 was used as a simulated
+  external test destination.
+ICMP inspection
+ICMP inspection was enabled under the global inspection policy to
+support ICMP request/reply traffic across zones.
 configure terminal
 policy-map global_policy
  class inspection_default
@@ -120,54 +91,52 @@ policy-map global_policy
 exit
 exit
 write memory
-```
+The inspection policy and interface status are shown below.
 
-## Connectivity and Security Testing
+Connectivity and Security Validation
+The following tests were performed in Packet Tracer.
+  Test           Source         Destination    Expected       Observed result
+behavior       
+  1              Admin PC       DMZ Server     Permit         Successful
 
-The following tests were performed to validate network segmentation and firewall behavior.
+  2              Admin PC       Guest PC       Permit         Successful
 
-| Test Case | Source | Destination | Expected Result | Observed Result |
-|---|---|---|---|---|
-| 1 | Admin PC | DMZ Server | Allow | Successful |
-| 2 | Admin PC | Guest PC | Allow | Successful |
-| 3 | Guest PC | Admin PC | Deny | Blocked |
-| 4 | Guest PC | Employee PC | Allow | Successful |
-| 5 | Guest PC | DMZ Server | Allow | Successful |
-| 6 | ASA Firewall | ISP Router | Allow | Successful |
-| 7 | ASA Firewall | DMZ Server | Allow | Successful |
+  3              Guest PC       Admin PC       Deny by ACL    Blocked
 
-### Test Evidence
+  4              Guest PC       Employee PC    Permit         Successful
 
-**Guest-to-Admin: Blocked**
+  5              Guest PC       DMZ Server     Permit         Successful
 
-The Guest PC cannot access the Admin PC because of the configured ACL rule.
+  6              ASA            ISP router     Permit         Successful
 
-![Guest to Admin Blocked](Screenshots/05_Guest-to-Admin-Blocked-and-DMZ-Allowed.png)
+  7              ASA            DMZ Server     Permit         Successful
+8              Guest PC       ISP router     External test  Unsuccessful;
+loopback                      not verified
+Guest network tests
+The Guest PC successfully reached the Employee PC and DMZ Server, while
+access to the Admin PC was blocked by the ACL.
 
-**Guest-to-DMZ: Allowed**
+Admin network tests
+The Admin PC successfully reached both the Guest PC and the DMZ Server.
 
-The Guest PC can communicate with the DMZ server.
+Project Screenshots
+  Screenshot                                        Evidence
+  01_Network-Topology.png                         Overall network design
 
-![Guest to DMZ Allowed](Screenshots/05_Guest-to-Admin-Blocked-and-DMZ-Allowed.png)
+  02_ASA-Interface-Configuration.png              ASA zone interfaces and IP
+addressing
 
-**Admin-to-DMZ: Allowed**
+  03_ASA-Inspection-and-Interface-Status.png      ICMP inspection and interface
+status
 
-The Admin PC can communicate with the DMZ server.
+  04_Guest-to-Employee-and-Admin-Tests.png        Guest connectivity tests
 
-![Admin to DMZ Allowed](Screenshots/06_Admin-to-Guest-and-DMZ-Allowed.png)
+  05_Guest-to-Admin-Blocked-and-DMZ-Allowed.png   ACL deny and Guest-to-DMZ test
 
-**Firewall Interface and Inspection Status**
-
-![ASA Inspection and Interface Status](Screenshots/03_ASA-Inspection-and-Interface-Status.png)
-
-## Project Structure
-
-```text
+  06_Admin-to-Guest-and-DMZ-Allowed.png           Admin connectivity tests
+07_ASA-ACL-Hit-Counters.png                     ACL rules and hit counters
+Repository Structure
 Enterprise-Network-Security-Lab/
-│
-├── Firewall-Rules/
-├── Incident-Reports/
-├── Packet-Tracer/
 ├── Screenshots/
 │   ├── 01_Network-Topology.png
 │   ├── 02_ASA-Interface-Configuration.png
@@ -176,41 +145,38 @@ Enterprise-Network-Security-Lab/
 │   ├── 05_Guest-to-Admin-Blocked-and-DMZ-Allowed.png
 │   ├── 06_Admin-to-Guest-and-DMZ-Allowed.png
 │   └── 07_ASA-ACL-Hit-Counters.png
-│
-├── Wireshark/
 ├── Enterprise-Firewall-Lab.pkt
 └── README.md
-```
-
-## Tools and Technologies
-
+Tools and Technologies
 - Cisco Packet Tracer
 - Cisco ASA 5506-X (simulated)
-- Cisco IOS Router
-- VLANs and network segmentation
+- Cisco IOS router
+- Network segmentation and security zones
 - Access Control Lists (ACLs)
 - Network Address Translation (NAT/PAT)
 - Static and default routing
 - ICMP inspection
 - Ping-based connectivity testing
-
-## Key Learning Outcomes
-
-- Designed a segmented enterprise network with multiple security zones.
-- Configured and verified Cisco ASA firewall interfaces.
-- Implemented access control policies using ACLs.
+Key Learning Outcomes
+- Designed a multi-zone enterprise network.
+- Configured and verified ASA firewall interfaces.
+- Applied an inbound ACL to restrict Guest-to-Admin traffic.
 - Configured dynamic PAT for multiple internal networks.
-- Implemented routing between internal networks and a simulated ISP.
+- Configured static return routes and an ASA default route.
 - Validated allowed and denied traffic using connectivity tests.
-- Used ACL hit counters to verify firewall policy enforcement.
-
-## Known Limitations
-
-- This project uses Cisco Packet Tracer simulation rather than physical firewall hardware.
-- Guest-to-external-network connectivity through NAT was not fully verified. NAT rule matching was observed, but the Guest-to-ISP loopback test did not succeed.
-- The project focuses on firewall fundamentals, segmentation, and traffic filtering rather than production deployment.
-
-## Conclusion
+- Used ACL hit counters to confirm policy matches.
+Known Limitations
+- The lab is a Packet Tracer simulation, not a deployment on physical
+  firewall hardware.
+- Guest-to-external-network connectivity through NAT was not
+  successfully verified. Although NAT rule matches were observed, the
+  Guest-to-ISP loopback test failed.
+- Results reflect the behavior of this simulated topology and should
+  not be treated as a production security assessment.
+Conclusion
+This lab demonstrates practical firewall fundamentals, network
+segmentation, access-control policy enforcement, NAT/PAT, routing, and
+connectivity validation in a simulated enterprise environment.
 
 This project demonstrates practical understanding of enterprise firewall configuration, network segmentation, access control, routing, and NAT. It provides a foundation for further learning in network security engineering and firewall administration.
 
