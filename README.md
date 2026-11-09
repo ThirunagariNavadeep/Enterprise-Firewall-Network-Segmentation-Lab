@@ -20,7 +20,7 @@ and connectivity validation.
 
 ## Network Topology
 
-![Enterprise network topology](Screenshots/01_Network-Topology.png)
+![Enterprise network topology](https://github.com/ThirunagariNavadeep/Enterprise-Firewall-Network-Segmentation-Lab/blob/918489bdb10b2643ef06b849312967a1adbcd1c3/screenshots/01_Network-Topology.png)
 
 ### Devices
 
