@@ -132,7 +132,7 @@ write memory
 The inspection policy and interface status are shown below.
 
 ![ASA inspection and interface
-status](Screenshots/03_ASA-Inspection-and-Interface-Status.png)
+status](https://github.com/ThirunagariNavadeep/Enterprise-Firewall-Network-Segmentation-Lab/blob/908e7704c6e79e6b93b556153c59983665bdca47/screenshots/03_ASA-Inspection-and-Interface-Status.png)
 
 ## Connectivity and Security Validation
 
