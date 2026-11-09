@@ -85,7 +85,7 @@ show access-list
 The captured output shows hit counters on both ACL entries, confirming
 that traffic matched the deny and permit rules.
 
-![ASA ACL hit counters](https://github.com/ThirunagariNavadeep/Enterprise-Firewall-Network-Segmentation-Lab/blob/5419fe5800d538f5404471a8778501934aa2ba09/screenshots/03_ASA-Inspection-and-Interface-Status.png)
+![ASA ACL hit counters](https://github.com/ThirunagariNavadeep/Enterprise-Firewall-Network-Segmentation-Lab/blob/3283ed7d45776c92c169285eb1b4f372042bb216/screenshots/07_ASA-ACL-Hit-Counters.png)
 
 ### Dynamic NAT/PAT
 
