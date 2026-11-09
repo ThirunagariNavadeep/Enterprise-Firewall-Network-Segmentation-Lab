@@ -166,7 +166,7 @@ The Guest PC successfully reached the Employee PC and DMZ Server, while
 access to the Admin PC was blocked by the ACL.
 
 ![Guest connectivity
-tests](Screenshots/04_Guest-to-Employee-and-Admin-Tests.png)
+tests](https://github.com/ThirunagariNavadeep/Enterprise-Firewall-Network-Segmentation-Lab/blob/64954dea616fd3182a87fb4066c7f30c8fc0adbc/screenshots/04_Guest-to-Employee-and-Admin-Tests.png)
 
 ![Guest-to-Admin blocked and Guest-to-DMZ
 allowed](Screenshots/05_Guest-to-Admin-Blocked-and-DMZ-Allowed.png)
