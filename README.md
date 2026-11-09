@@ -169,7 +169,7 @@ access to the Admin PC was blocked by the ACL.
 tests](https://github.com/ThirunagariNavadeep/Enterprise-Firewall-Network-Segmentation-Lab/blob/64954dea616fd3182a87fb4066c7f30c8fc0adbc/screenshots/04_Guest-to-Employee-and-Admin-Tests.png)
 
 ![Guest-to-Admin blocked and Guest-to-DMZ
-allowed](Screenshots/05_Guest-to-Admin-Blocked-and-DMZ-Allowed.png)
+allowed](https://github.com/ThirunagariNavadeep/Enterprise-Firewall-Network-Segmentation-Lab/blob/caf1bdf8a00babef2f4ab02388c55ff6f6e088fc/screenshots/05_Guest-to-Admin-Blocked-and-DMZ-Allowed.png)
 
 ### Admin network tests
 
