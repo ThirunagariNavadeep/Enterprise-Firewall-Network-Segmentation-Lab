@@ -176,7 +176,7 @@ allowed](https://github.com/ThirunagariNavadeep/Enterprise-Firewall-Network-Segm
 The Admin PC successfully reached both the Guest PC and the DMZ Server.
 
 ![Admin-to-Guest and Admin-to-DMZ
-allowed](Screenshots/06_Admin-to-Guest-and-DMZ-Allowed.png)
+allowed](https://github.com/ThirunagariNavadeep/Enterprise-Firewall-Network-Segmentation-Lab/blob/95012172d6a1dc66117efebd7009c6dc6edaa243/screenshots/06_Admin-to-Guest-and-DMZ-Allowed.png)
 
 ## Project Screenshots
 
