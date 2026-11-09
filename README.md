@@ -61,7 +61,7 @@ and connectivity validation.
 All four configured ASA interfaces were verified as up/up.
 
 ![ASA interface
-configuration](Screenshots/02_ASA-Interface-Configuration.png)
+configuration](https://github.com/ThirunagariNavadeep/Enterprise-Firewall-Network-Segmentation-Lab/blob/dd4558798a36307064ddb5bee432de766677691e/screenshots/02_ASA-Interface-Configuration.png)
 
 ### Guest access-control policy
 
